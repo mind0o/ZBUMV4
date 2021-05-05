@@ -126,14 +126,12 @@ app.get('/ZBUMCommunicate/deleteGame/:gameID/:pass', function (req, res) {
     res.send("not found");
     return;
   }
-  if(gameInfosJSON[indexWeWant].gameID == "AAA" && req.params.pass == "aaaaaa"){
-
-  }else{
+  
     if(req.params.pass != passwords[indexWeWant]){
       res.send("not found");
       return;
     }
-  }
+  
   
   takenGameIDs.splice(indexWeWant, 1);
   gameInfosJSON.splice(indexWeWant, 1);
