@@ -85,24 +85,21 @@ app.get('/ZBUMCommunicate/makeGame/:gameID/:lang/:minPlayers/:maxPlayers/:gameMo
     res.send("doneUUU"+passwords[passwords.length-1]); //replace with your data here
   });
 
-  app.post('/ZBUMCommunicate/changeJavascriptFile/:gameID/:pass', upload.array('file', 12), function (req, res, next) {
+  app.post('/ZBUMCommunicate/changeJavascriptFile/:gameID/:pass', function requestHandler(req, res) {
     let indexWeWant = takenGameIDs.indexOf(req.params.gameID.toUpperCase());
     if (indexWeWant == -1) {
-      fs.unlinkSync(req.files[0].path);
+
       res.send("not found");
       return;
     }
     if(req.params.pass != passwords[indexWeWant]){
-      fs.unlinkSync(req.files[0].path);
+
       res.send("not found");
       return;
     }
-    console.log(req.files)
-    fs.readFile(req.files[0].path, 'utf8', function(err, data) {
-        if (err) throw err;
-        javascriptTexts[indexWeWant] = data;
-    });
-    fs.unlinkSync(req.files[0].path);
+    console.log(req.body)
+        javascriptTexts[indexWeWant] = req.body.code;
+
     res.send("done");
   });
   app.get('/ZBUMCommunicate/deleteGame/:gameID/:pass', function (req, res) {
@@ -186,44 +183,36 @@ app.get('/ZBUMCommunicate/changePlayerName/:gameID/:whichPlayer/:whatName/:setAc
   res.send(tempTxt); //replace with your data here
 });
 
-  app.post('/ZBUMCommunicate/changeLanguagePack/:gameID/:pass', upload.array('file', 12), function (req, res, next) {
+  app.post('/ZBUMCommunicate/changeLanguagePack/:gameID/:pass', function requestHandler(req, res) {
     let indexWeWant = takenGameIDs.indexOf(req.params.gameID.toUpperCase());
     if (indexWeWant == -1) {
-      fs.unlinkSync(req.files[0].path);
       res.send("not found");
       return;
     }
     if(req.params.pass != passwords[indexWeWant]){
-      fs.unlinkSync(req.files[0].path);
       res.send("not found");
       return;
     }
-    console.log(req.files)
-    fs.readFile(req.files[0].path, 'utf8', function(err, data) {
-        if (err) throw err;
-        languagePacks[indexWeWant] = data;
-    });
-    fs.unlinkSync(req.files[0].path);
+    console.log(req.body)
+
+        languagePacks[indexWeWant] = req.body;
+
     res.send("done");
   });
-  app.post('/ZBUMCommunicate/updateJSONFile/:gameID/:pass', upload.array('file', 12), function (req, res, next) {
+  app.post('/ZBUMCommunicate/updateJSONFile/:gameID/:pass', function requestHandler(req, res) {
     let indexWeWant = takenGameIDs.indexOf(req.params.gameID.toUpperCase());
     if (indexWeWant == -1) {
-      fs.unlinkSync(req.files[0].path);
       res.send("not found");
       return;
     }
     if(req.params.pass != passwords[indexWeWant]){
-      fs.unlinkSync(req.files[0].path);
       res.send("not found");
       return;
     }
-    console.log(req.files)
-    fs.readFile(req.files[0].path, 'utf8', function(err, data) {
-        if (err) throw err;
-        gameInfosJSON[indexWeWant] = JSON.parse(data);
-    });
-    fs.unlinkSync(req.files[0].path);
+    console.log(req.body)
+
+        gameInfosJSON[indexWeWant] = req.body;
+
     res.send("done");
   });
   app.post('/ZBUMCommunicate/updatePlayerJSONFile/:gameID/:whichPlayer/:pass', function requestHandler(req, res) {
